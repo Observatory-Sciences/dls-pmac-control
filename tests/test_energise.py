@@ -4,7 +4,6 @@ from mock import patch, Mock, call
 import time
 import sys
 
-sys.path.append("/home/dlscontrols/bem-osl/dls-pmac-control/dls_pmaccontrol")
 from PyQt5.QtCore import Qt
 from PyQt5.QtTest import QTest, QSignalSpy
 from PyQt5.QtWidgets import (
@@ -14,7 +13,7 @@ from PyQt5.QtWidgets import (
     QTableWidgetItem,
     QCheckBox,
 )
-from energise import Energiseform
+from dls_pmaccontrol.energise import Energiseform
 
 app = QApplication(sys.argv)
 
@@ -30,9 +29,9 @@ class TestWidget(QMainWindow):
 
 
 class EnergiseTest(unittest.TestCase):
-    @patch("energise.Energiseform.updateScreen")
-    @patch("energise.Energiseform.readM750x")
-    @patch("energise.Energiseform.createCheckBoxes")
+    @patch("dls_pmaccontrol.energise.Energiseform.updateScreen")
+    @patch("dls_pmaccontrol.energise.Energiseform.readM750x")
+    @patch("dls_pmaccontrol.energise.Energiseform.createCheckBoxes")
     def setUp(self, mock_boxes, mock_read, mock_update):
         mock_read.return_value = (0, 0)
         self.test_widget = TestWidget()
@@ -61,17 +60,17 @@ class EnergiseTest(unittest.TestCase):
         for k in range(18, 32):
             assert self.obj.lstCheckBoxes[k].isChecked() == False
 
-    @patch("energise.Energiseform.readM750x")
+    @patch("dls_pmaccontrol.energise.Energiseform.readM750x")
     def test_isScreenUpToDate(self, mock_read):
         mock_read.return_value = (0x00FFFF, 0x00FFFF)
         self.obj.val7501 = 0x00FFFF
         self.obj.val7503 = 0x00FFFF
         assert self.obj.isScreenUpToDate() == True
 
-    @patch("energise.Energiseform.updateScreen")
-    @patch("energise.Energiseform.readM750x")
+    @patch("dls_pmaccontrol.energise.Energiseform.updateScreen")
+    @patch("dls_pmaccontrol.energise.Energiseform.readM750x")
     @patch("PyQt5.QtWidgets.QMessageBox.information")
-    @patch("energise.Energiseform.isScreenUpToDate")
+    @patch("dls_pmaccontrol.energise.Energiseform.isScreenUpToDate")
     def test_sendCommand_outofdate(self, mock_screen, mock_box, mock_read, mock_update):
         mock_screen.return_value = False
         mock_read.return_value = (None, None)
@@ -91,7 +90,7 @@ class EnergiseTest(unittest.TestCase):
         assert mock_read.called
         assert mock_screen.called
 
-    @patch("energise.Energiseform.isScreenUpToDate")
+    @patch("dls_pmaccontrol.energise.Energiseform.isScreenUpToDate")
     def test_sendCommand_uptodate(self, mock_screen):
         mock_screen.return_value = True
         self.obj.val7501 = 0xFF0000

@@ -5,13 +5,12 @@ import time
 import os
 import sys
 
-sys.path.append("/home/dlscontrols/bem-osl/dls-pmac-control/dls_pmaccontrol")
 from PyQt5.QtCore import Qt, QPoint
 from PyQt5.QtTest import QTest, QSignalSpy
 from PyQt5.QtWidgets import QWidget, QApplication, QMainWindow, QTableWidgetItem
 from qwt import QwtPlotCurve
-from gather import PmacGatherform
-from ppmacgather import PpmacGatherform
+from dls_pmaccontrol.gather import PmacGatherform
+from dls_pmaccontrol.ppmacgather import PpmacGatherform
 
 app = QApplication(sys.argv)
 
@@ -94,14 +93,14 @@ class PmacGatherTest(unittest.TestCase):
         assert self.obj.lstChannels[1].dataType == int
         assert self.obj.lstChannels[2].dataType == int
 
-    @patch("gather.PmacGatherform.calcSampleTime")
+    @patch("dls_pmaccontrol.gather.PmacGatherform.calcSampleTime")
     def test_change_no_samples(self, mock_calc):
         self.obj.lneNumberSamples.setText("1000")
         QTest.keyClick(self.obj.lneNumberSamples, Qt.Key_Enter)
         assert self.obj.nGatherPoints == 1000
         assert self.obj.nServoCyclesGather == 10
 
-    @patch("gather.PmacGatherform.calcSampleTime")
+    @patch("dls_pmaccontrol.gather.PmacGatherform.calcSampleTime")
     def test_change_sample_time(self, mock_calc):
         self.obj.lneSampleTime.setText("5")
         QTest.keyClick(self.obj.lneSampleTime, Qt.Key_Enter)
@@ -118,7 +117,7 @@ class PmacGatherTest(unittest.TestCase):
         self.assertFalse(self.obj.btnCollect.isEnabled())
         self.assertFalse(self.obj.btnSave.isEnabled())
 
-    @patch("gather.PmacGatherform.gatherSetup")
+    @patch("dls_pmaccontrol.gather.PmacGatherform.gatherSetup")
     def test_setup_clicked(self, mock_setup):
         self.obj.btnSetup.setEnabled(True)
         QTest.mouseClick(self.obj.btnSetup, Qt.LeftButton)
@@ -135,9 +134,9 @@ class PmacGatherTest(unittest.TestCase):
         ret = self.obj.collectData()
         assert ret == ["", "ret1", "", "ret2", "", "ret3"]
 
-    @patch("gather.Gatherform.plotData")
-    @patch("gather.Gatherform.collectData")
-    @patch("gather.Gatherform.parseData")
+    @patch("dls_pmaccontrol.gather.Gatherform.plotData")
+    @patch("dls_pmaccontrol.gather.Gatherform.collectData")
+    @patch("dls_pmaccontrol.gather.Gatherform.parseData")
     def test_collect_clicked(self, mock_parse, mock_collect, mock_plot):
         self.obj.btnCollect.setEnabled(True)
         QTest.mouseClick(self.obj.btnCollect, Qt.LeftButton)
@@ -169,8 +168,8 @@ class PmacGatherTest(unittest.TestCase):
         assert self.obj.servoCycleTime == 1.0
         assert self.obj.sampleTime == 1.0
 
-    @patch("gather.PmacGatherform.plotData")
-    @patch("gather.PmacGatherform.collectData")
+    @patch("dls_pmaccontrol.gather.PmacGatherform.plotData")
+    @patch("dls_pmaccontrol.gather.PmacGatherform.collectData")
     def test_collect_clicked(self, mock_collect, mock_plot):
         self.obj.btnCollect.setEnabled(True)
         QTest.mouseClick(self.obj.btnCollect, Qt.LeftButton)
@@ -252,7 +251,7 @@ class PpmacGatherTest(unittest.TestCase):
         assert self.obj.gatherConfig() == True
         self.test_widget.pmac.sendCommand.assert_called_with("Gather.items=1")
 
-    @patch("ppmacgather.PpmacGatherform.gatherConfig")
+    @patch("dls_pmaccontrol.ppmacgather.PpmacGatherform.gatherConfig")
     def test_click_apply(self, mock_config):
         mock_config.return_value = True
         self.obj.nServoCyclesGather = 10
@@ -292,7 +291,7 @@ class PpmacGatherTest(unittest.TestCase):
         assert self.obj.servoCycleTime == 1.0
         assert self.obj.sampleTime == 1.0
 
-    @patch("ppmacgather.PpmacGatherform.calcSampleTime")
+    @patch("dls_pmaccontrol.ppmacgather.PpmacGatherform.calcSampleTime")
     def test_changed_tab(self, mock_calc):
         attrs = {"sendCommand.return_value": ("10", True)}
         self.obj.parent.pmac.configure_mock(**attrs)
@@ -305,8 +304,8 @@ class PpmacGatherTest(unittest.TestCase):
         assert self.obj.nGatherPoints == 10
         assert self.obj.lneNumberSamples.text() == "10"
 
-    @patch("ppmacgather.PpmacGatherform.plotData")
-    @patch("ppmacgather.PpmacGatherform.collectData")
+    @patch("dls_pmaccontrol.ppmacgather.PpmacGatherform.plotData")
+    @patch("dls_pmaccontrol.ppmacgather.PpmacGatherform.collectData")
     def test_collect_clicked(self, mock_collect, mock_plot):
         self.obj.btnCollect.setEnabled(True)
         QTest.mouseClick(self.obj.btnCollect, Qt.LeftButton)

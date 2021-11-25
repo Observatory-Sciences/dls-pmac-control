@@ -4,12 +4,11 @@ from mock import patch, Mock
 import time
 import sys
 
-sys.path.append("/home/dlscontrols/bem-osl/dls-pmac-control/dls_pmaccontrol")
 from PyQt5.QtCore import Qt, QPoint
 from PyQt5.QtTest import QTest, QSignalSpy
 from PyQt5.QtWidgets import QWidget, QApplication, QMainWindow, QTableWidgetItem
 from qwt import QwtPlotCurve
-from gatherchannel import PpmacGatherChannel, PmacGatherChannel
+from dls_pmaccontrol.gatherchannel import PpmacGatherChannel, PmacGatherChannel
 
 app = QApplication(sys.argv)
 

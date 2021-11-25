@@ -2,9 +2,8 @@ import unittest
 import io
 import sys
 
-sys.path.append("/home/dlscontrols/bem-osl/dls-pmac-control/dls_pmaccontrol")
 from dls_pmaccontrol import HelloClass, say_hello_lots
-from cli import main
+from dls_pmaccontrol.cli import main
 
 
 class DlsControlTest(unittest.TestCase):

@@ -5,12 +5,11 @@ import time
 from os import path
 import sys
 
-sys.path.append("/home/dlscontrols/bem-osl/dls-pmac-control/dls_pmaccontrol")
 from PyQt5.QtCore import Qt
 from PyQt5.QtTest import QTest, QSignalSpy
 from PyQt5.QtWidgets import QWidget, QApplication, QMainWindow, QTableWidgetItem
 from PyQt5.QtGui import QPixmap
-from status import Statusform, PpmacStatusform
+from dls_pmaccontrol.status import Statusform, PpmacStatusform
 
 app = QApplication(sys.argv)
 

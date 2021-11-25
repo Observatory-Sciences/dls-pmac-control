@@ -5,7 +5,6 @@ import time
 import os
 import sys
 
-sys.path.append("/home/dlscontrols/bem-osl/dls-pmac-control/dls_pmaccontrol")
 from PyQt5.QtCore import Qt, QPoint, QEvent
 from PyQt5.QtTest import QTest, QSignalSpy
 from PyQt5.QtGui import QKeyEvent
@@ -16,7 +15,7 @@ from PyQt5.QtWidgets import (
     QTableWidgetItem,
     QMessageBox,
 )
-from motor import Controlform
+from dls_pmaccontrol.motor import Controlform
 
 app = QApplication(sys.argv)
 
@@ -351,7 +350,7 @@ class MotorTestTelnetConnectionRequired(unittest.TestCase):
         mock_pixmap.assert_called_with(self.obj.greenLedOff)
         assert self.obj.lblIdentity.text() == ""
 
-    @patch("motor.Controlform.addToTxtShell")
+    @patch("dls_pmaccontrol.motor.Controlform.addToTxtShell")
     @patch("dls_pmaclib.dls_pmacremote.PmacTelnetInterface.jogInc")
     def test_jog_neg(self, mock_joginc, mock_addtxt):
         mock_joginc.return_value = ("cmd", "response", True)
@@ -360,7 +359,7 @@ class MotorTestTelnetConnectionRequired(unittest.TestCase):
             self.obj.currentMotor, "neg", str(self.obj.lneJogDist.text())
         )
 
-    @patch("motor.Controlform.addToTxtShell")
+    @patch("dls_pmaccontrol.motor.Controlform.addToTxtShell")
     @patch("dls_pmaclib.dls_pmacremote.PmacTelnetInterface.jogInc")
     def test_jog_pos(self, mock_joginc, mock_addtxt):
         mock_joginc.return_value = ("cmd", "response", True)
@@ -369,14 +368,14 @@ class MotorTestTelnetConnectionRequired(unittest.TestCase):
             self.obj.currentMotor, "pos", str(self.obj.lneJogDist.text())
         )
 
-    @patch("motor.Controlform.addToTxtShell")
+    @patch("dls_pmaccontrol.motor.Controlform.addToTxtShell")
     @patch("dls_pmaclib.dls_pmacremote.PmacTelnetInterface.jogStop")
     def test_jog_stop(self, mock_jogstop, mock_addtxt):
         mock_jogstop.return_value = ("cmd", "response", True)
         assert self.obj.jogStop() == None
         mock_jogstop.assert_called_with(self.obj.currentMotor)
 
-    @patch("motor.Controlform.addToTxtShell")
+    @patch("dls_pmaccontrol.motor.Controlform.addToTxtShell")
     @patch("dls_pmaclib.dls_pmacremote.PmacTelnetInterface.homeCommand")
     def test_jog_home(self, mock_home, mock_addtxt):
         mock_home.return_value = ("cmd", "response", True)
